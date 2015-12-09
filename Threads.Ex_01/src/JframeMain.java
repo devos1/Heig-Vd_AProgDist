@@ -46,16 +46,17 @@ public class JframeMain extends JFrame {
 		startStop.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {	
 				if (!started) {
+					//rond.setStop(true);
 					t1.start();
 					started = true;	
 					JOptionPane.showMessageDialog(null, "Début clignotement", "INFO", JOptionPane.INFORMATION_MESSAGE);
 				}else if(started && !stopped){
 					t1.suspend();
-					//rond.setStop(true);
+					//rond.setStop(false);
 					stopped = true;
 					JOptionPane.showMessageDialog(null, "Fin clignotement", "INFO", JOptionPane.INFORMATION_MESSAGE);
 				}else{
-					//rond.setStop(false);
+					//rond.setStop(true);
 					t1.resume();
 					JOptionPane.showMessageDialog(null, "Début clignotement", "INFO", JOptionPane.INFORMATION_MESSAGE);
 					stopped = false;
