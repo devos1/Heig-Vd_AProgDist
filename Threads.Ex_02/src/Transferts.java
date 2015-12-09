@@ -1,3 +1,4 @@
+import junit.framework.Test;
 
 /*
  * COMMENATAIRES :
@@ -13,31 +14,38 @@ public class Transferts implements Runnable {
 	private int _nbTransferts;
 	private boolean _protege;
 	private int _montant;	// Entre 1 et 5.-
+	private TestOpersation _t;
 	
 	// CONSTRUCTEUR
-	public Transferts(Compte cptSrc, Compte cptDest, Operation op, int nbTrasnferts, boolean protege){
+	public Transferts(Compte cptSrc, Compte cptDest, Operation op, int nbTrasnferts, boolean protege, TestOpersation t){
 		_cptSrc = cptSrc;
 		_cptDest = cptDest;
 		_op = op;
 		_nbTransferts = nbTrasnferts;
 		_protege = protege;
+		_t = t;
 	}
 
 	@Override
 	public void run() {
 		for (int i = 0; i < _nbTransferts; i++) {				
-			synchronized (_cptDest) {
+			synchronized (_t) {
 				_montant = (int)(Math.random() * ((5 - 1) + 1)) + 1;
 				
 				if (i % 2 == 0) {
-					_cptSrc.Debit(_montant);
+					
+					if (_cptSrc.Debit(_montant)) {
+						_cptDest.Credit(_montant);
+					}
 					//System.out.println("A vers B => " + _montant);
-					_cptDest.Credit(_montant);
+					
 					//System.out.println("B a reçu de A => " + _montant);
 				}else {
-					_cptDest.Debit(_montant);
+					if (_cptDest.Debit(_montant)) {
+						_cptSrc.Credit(_montant);
+					}					
 					//System.out.println("B vers A => " + _montant);
-					_cptSrc.Credit(_montant);
+					
 					//System.out.println("A a reçu de B => " + _montant);
 					}
 			}
