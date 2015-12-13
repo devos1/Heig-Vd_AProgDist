@@ -24,6 +24,9 @@ import java.security.CodeSource;
 import java.awt.Container;
 import javax.swing.BoxLayout;
 import javax.swing.GroupLayout.Alignment;
+
+import org.hamcrest.core.IsInstanceOf;
+
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -89,19 +92,20 @@ public class IhmObject{
 			//System.out.println("Name : " + field.getName() + "Type : " + field.getType());			
 			//System.out.println("-------------------------");
 			JPanel panelObj = new JPanel();
-			if (field.getType() == int.class) {			
-				panelObj.setLayout(new BoxLayout(panelObj, BoxLayout.LINE_AXIS));
+			panelObj.setLayout(new BoxLayout(panelObj, BoxLayout.LINE_AXIS));
+			if (field.getType() == int.class) {							
 				int taille = field.getAnnotation(Taille.class).value();				
 				field.setAccessible(true);
 				addTextField(field.getName(), taille, panelObj, field.get(o).toString(), field.getName());				
 				panelObjects.add(panelObj);
+				field.set(o,(int)field.get(o));
 				p.set_age((int) field.get(o));
 			}else if (field.getType() == String.class) {
-				panelObj.setLayout(new BoxLayout(panelObj, BoxLayout.LINE_AXIS));
 				int taille = field.getAnnotation(Taille.class).value();				
 				field.setAccessible(true);
 				addTextField(field.getName(), taille, panelObj, field.get(o).toString(), field.getName());				
 				panelObjects.add(panelObj);
+				field.set(o,field.get(o).toString());
 				p.set_prenom(field.get(o).toString());
 			}
 		}	
@@ -192,10 +196,33 @@ public class IhmObject{
 			@Override
 			public void keyReleased(KeyEvent e) {
 				JTextField jtf = (JTextField)e.getSource();
-				if (jtf.getName() == "prenom") {
-					p.set_prenom(jtf.getText());
-				}else if (jtf.getName() == "age") {
-					p.set_age(Integer.parseInt(jtf.getText()));
+				Class<?> c = o.getClass();
+				Field[] fields = c.getDeclaredFields();
+				for (Field field : fields) {
+					if (jtf.getText() != null) {
+						field.setAccessible(true);
+						if (field.getName() == jtf.getName()) {
+							try {
+								if (field.getType() == int.class) {
+									if (jtf.getText() != null && jtf.getText() != "") {
+										try {
+											field.set(o, Integer.parseInt(jtf.getText()));
+										} catch (Exception e2) {
+											
+										}
+									}									
+								}else {
+									field.set(o, jtf.getText());	
+								}
+							} catch (IllegalArgumentException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							} catch (IllegalAccessException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+						}
+					}
 				}
 			}
 			
@@ -231,9 +258,6 @@ public class IhmObject{
 		//pane.setLayout(new BoxLayout(pane, BoxLayout.PAGE_AXIS));
 		frame.add(panelBoutons);
 		
-		// Set up the content pane
-		//addComponentsToPane(frame.getContentPane());
-		
 		// Display the window
 		frame.pack();
 		frame.setVisible(true);
@@ -261,7 +285,7 @@ public class IhmObject{
 			}
 		}*/
 			
-		oos.writeObject(p);
+		oos.writeObject(o);
 		oos.close();
 		fos.close();
 	}	
