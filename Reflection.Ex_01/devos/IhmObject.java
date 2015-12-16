@@ -76,7 +76,7 @@ public class IhmObject{
 			p = new Person(null, 0);
 			//JOptionPane.showMessageDialog(null, "PERSON", "INFO", JOptionPane.INFORMATION_MESSAGE);
 		}else {
-			JOptionPane.showConfirmDialog(null, o.getClass().toString());
+			//JOptionPane.showConfirmDialog(null, o.getClass().toString());
 		}
 		
 		if (panelObjects == null) {
@@ -99,14 +99,14 @@ public class IhmObject{
 				addTextField(field.getName(), taille, panelObj, field.get(o).toString(), field.getName());				
 				panelObjects.add(panelObj);
 				field.set(o,(int)field.get(o));
-				p.set_age((int) field.get(o));
+				//p.set_age((int) field.get(o));
 			}else if (field.getType() == String.class) {
 				int taille = field.getAnnotation(Taille.class).value();				
 				field.setAccessible(true);
 				addTextField(field.getName(), taille, panelObj, field.get(o).toString(), field.getName());				
 				panelObjects.add(panelObj);
 				field.set(o,field.get(o).toString());
-				p.set_prenom(field.get(o).toString());
+				//p.set_prenom(field.get(o).toString());
 			}
 		}	
 
