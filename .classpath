@@ -4,6 +4,7 @@
 	<classpathentry kind="src" path="Threads.Ex_02/src"/>
 	<classpathentry kind="src" path="Reflection.Ex_01"/>
 	<classpathentry kind="src" path="Sockets_ChatTCP"/>
+	<classpathentry kind="src" path="Sockets_BallonUDP"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="bin"/>
